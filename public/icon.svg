@@ -1,4 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-  <rect width="512" height="512" rx="64" fill="#000000"/>
-  <text x="256" y="300" font-size="240" font-family="Arial" font-weight="bold" fill="white" text-anchor="middle">MT</text>
+  <rect width="512" height="512" rx="64" fill="#292524"/>
+  <text x="256" y="280" font-family="Cormorant Garamond, serif" font-weight="400" font-size="200" fill="#fafaf9" text-anchor="middle" letter-spacing="0.05em">IC</text>
+  <text x="256" y="360" font-family="Montserrat, sans-serif" font-weight="200" font-size="40" fill="#a8a29e" text-anchor="middle" letter-spacing="0.4em">IMCUS</text>
 </svg>

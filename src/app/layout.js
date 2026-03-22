@@ -1,8 +1,8 @@
 import "./globals.css";
 
 export const metadata = {
-  title: "Mi Tienda",
-  description: "Ropa, Zapatillas y Electrónica",
+  title: "ImCus",
+  description: "Electrónica, Zapatillas, Perfumes y más",
   manifest: "/manifest.json",
 };
 

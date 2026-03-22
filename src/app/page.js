@@ -4,7 +4,7 @@ import { db } from "../lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
 
 export default function Home() {
-  var whatsapp = "5491112345678";
+  var whatsapp = "5491138943530";
   var [productos, setProductos] = useState([]);
   var [busqueda, setBusqueda] = useState("");
   var [categoriaActiva, setCategoriaActiva] = useState("Todos");
@@ -168,13 +168,13 @@ export default function Home() {
               className="text-2xl md:text-3xl text-stone-800"
               style={{ fontFamily: fuente1, fontWeight: 400, letterSpacing: "0.15em" }}
             >
-              MI TIENDA
+              ImCus
             </h1>
             <span
               className="text-stone-400 uppercase mt-0.5"
               style={{ fontFamily: fuente2, fontWeight: 300, fontSize: "10px", letterSpacing: "0.3em" }}
             >
-              Tu estilo, nuestra pasión
+              Tu tienda online
             </span>
           </a>
 
@@ -257,13 +257,13 @@ export default function Home() {
             className="text-3xl md:text-5xl text-stone-800 mb-4 leading-tight"
             style={{ fontFamily: fuente1, fontWeight: 300 }}
           >
-            Estilo que define
+            Lo que buscás, al mejor precio
           </h2>
           <p
             className="text-sm text-stone-400 max-w-md mx-auto"
             style={{ fontFamily: fuente2, fontWeight: 300, letterSpacing: "0.1em" }}
           >
-            Descubrí nuestra selección curada de productos pensados para vos
+            Explorá nuestro catálogo y encontrá lo que necesitás
           </p>
         </div>
       </section>
@@ -358,13 +358,13 @@ export default function Home() {
                 className="text-lg text-stone-700"
                 style={{ fontFamily: fuente1, fontWeight: 400, letterSpacing: "0.15em" }}
               >
-                MI TIENDA
+                ImCus
               </p>
               <p
                 className="text-xs text-stone-400 mt-1"
                 style={{ fontFamily: fuente2, fontWeight: 300, letterSpacing: "0.1em" }}
               >
-                Tu estilo, nuestra pasión
+                Tu tienda online
               </p>
             </div>
             <a
@@ -385,7 +385,7 @@ export default function Home() {
               className="text-stone-300"
               style={{ fontFamily: fuente2, fontWeight: 300, fontSize: "11px", letterSpacing: "0.05em" }}
             >
-              &copy; 2026 Mi Tienda &mdash; Todos los derechos reservados
+              &copy; 2026 ImCus &mdash; Todos los derechos reservados
             </p>
           </div>
         </div>
