@@ -4,12 +4,12 @@ import { getStorage } from "firebase/storage";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDir7-igPKWVB9HheWwFgnr3U9zwllT06k",
-  authDomain: "mi-catalogo-72325.firebaseapp.com",
-  projectId: "mi-catalogo-72325",
-  storageBucket: "mi-catalogo-72325.firebasestorage.app",
-  messagingSenderId: "630128099945",
-  appId: "1:630128099945:web:ddbef29587ce1320db58f8"
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID
 };
 
 var app = initializeApp(firebaseConfig);
@@ -18,3 +18,5 @@ var storage = getStorage(app);
 var auth = getAuth(app);
 
 export { db, storage, auth };
+
+
