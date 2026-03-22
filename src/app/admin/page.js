@@ -19,6 +19,7 @@ import {
   uploadBytes,
   getDownloadURL
 } from "firebase/storage";
+import * as XLSX from "xlsx";
 
 export default function Admin() {
   var [usuario, setUsuario] = useState(null);
@@ -29,20 +30,29 @@ export default function Admin() {
   var [cargando, setCargando] = useState(true);
   var [guardando, setGuardando] = useState(false);
   var [editando, setEditando] = useState(null);
+  var [subiendo, setSubiendo] = useState(false);
 
   var categorias = [
-    "Remeras",
-    "Pantalones",
-    "Buzos",
-    "Accesorios",
+    "Electrónica",
     "Zapatillas",
-    "Electrónica"
+    "Perfumes",
+    "Ropa de Bebé",
+    "Camperas"
   ];
+
+  var categoriasSinTalle = ["Electrónica", "Perfumes"];
+
+  function obtenerPlaceholderTalle(cat) {
+    if (cat === "Zapatillas") return "Talles (ej: 38, 39, 40, 41, 42)";
+    if (cat === "Ropa de Bebé") return "Talles (ej: 0-3m, 3-6m, 6-12m, 12-18m)";
+    if (cat === "Camperas") return "Talles (ej: S, M, L, XL)";
+    return "Talles";
+  }
 
   var [form, setForm] = useState({
     nombre: "",
     precio: "",
-    categoria: "Remeras",
+    categoria: "Electrónica",
     talles: "",
     descripcion: "",
     disponible: true,
@@ -94,7 +104,7 @@ export default function Admin() {
     setForm({
       nombre: "",
       precio: "",
-      categoria: "Remeras",
+      categoria: "Electrónica",
       talles: "",
       descripcion: "",
       disponible: true,
@@ -123,11 +133,12 @@ export default function Admin() {
     setError("");
     try {
       var urlFoto = await subirFoto();
+      var sinTalle = categoriasSinTalle.indexOf(form.categoria) !== -1;
       var datos = {
         nombre: form.nombre,
         precio: Number(form.precio),
         categoria: form.categoria,
-        talles: form.categoria === "Electrónica" ? "" : form.talles,
+        talles: sinTalle ? "" : form.talles,
         descripcion: form.descripcion,
         disponible: form.disponible,
         imagen: urlFoto || ""
@@ -160,7 +171,7 @@ export default function Admin() {
     setForm({
       nombre: prod.nombre || "",
       precio: String(prod.precio || ""),
-      categoria: prod.categoria || "Remeras",
+      categoria: prod.categoria || "Electrónica",
       talles: prod.talles || "",
       descripcion: prod.descripcion || "",
       disponible: prod.disponible !== false,
@@ -173,6 +184,54 @@ export default function Admin() {
     var nuevoForm = { ...form };
     nuevoForm[campo] = valor;
     setForm(nuevoForm);
+  }
+
+  async function subirExcel(e) {
+    var archivo = e.target.files[0];
+    if (!archivo) return;
+    setSubiendo(true);
+    setError("");
+    var reader = new FileReader();
+    reader.onload = async function (ev) {
+      try {
+        var workbook = XLSX.read(ev.target.result, { type: "binary" });
+        var hoja = workbook.Sheets[workbook.SheetNames[0]];
+        var datos = XLSX.utils.sheet_to_json(hoja);
+        datos = datos.filter(function (fila) {
+          return fila.nombre && fila.precio && String(fila.nombre).indexOf("(obligatorio)") === -1;
+        });  
+        var cargados = 0;
+        var errores = 0;
+        for (var i = 0; i < datos.length; i++) {
+          var fila = datos[i];
+          if (!fila.nombre || !fila.precio) {
+            errores++;
+            continue;
+          }
+          await addDoc(collection(db, "productos"), {
+            nombre: String(fila.nombre || ""),
+            precio: Number(fila.precio) || 0,
+            categoria: String(fila.categoria || "Electrónica"),
+            talles: String(fila.talles || ""),
+            descripcion: String(fila.descripcion || ""),
+            disponible: fila.disponible !== false && fila.disponible !== "FALSE",
+            imagen: ""
+          });
+          cargados++;
+        }
+        var mensaje = "Se cargaron " + cargados + " productos!";
+        if (errores > 0) {
+          mensaje += " (" + errores + " filas sin nombre o precio fueron ignoradas)";
+        }
+        alert(mensaje);
+        await traerProductos();
+      } catch (err) {
+        alert("Error al leer el Excel: " + err.message);
+      }
+      setSubiendo(false);
+    };
+    reader.readAsBinaryString(archivo);
+    e.target.value = "";
   }
 
   if (cargando) {
@@ -234,6 +293,16 @@ export default function Admin() {
           <a href="/" className="text-sm underline">
             Ver tienda
           </a>
+          <label className="text-sm bg-emerald-600 px-3 py-1 rounded cursor-pointer hover:bg-emerald-700">
+            {subiendo ? "Subiendo..." : "Subir Excel"}
+            <input
+              type="file"
+              accept=".xlsx,.xls"
+              className="hidden"
+              onChange={subirExcel}
+              disabled={subiendo}
+            />
+          </label>
           <button
             onClick={cerrarSesion}
             className="text-sm bg-red-500 px-3 py-1 rounded"
@@ -291,14 +360,10 @@ export default function Admin() {
             })}
           </select>
 
-          {form.categoria !== "Electrónica" && (
+          {categoriasSinTalle.indexOf(form.categoria) === -1 && (
             <input
               type="text"
-              placeholder={
-                form.categoria === "Zapatillas"
-                  ? "Talles (ej: 38, 39, 40, 41, 42)"
-                  : "Talles (ej: S, M, L, XL)"
-              }
+              placeholder={obtenerPlaceholderTalle(form.categoria)}
               value={form.talles}
               onChange={function (e) {
                 cambiarCampo("talles", e.target.value);
@@ -391,7 +456,7 @@ export default function Admin() {
                     {prod.nombre}
                   </h3>
                   <p className="text-sm text-gray-500">
-                    {prod.categoria +
+                    {(prod.categoria || "") +
                       " - $" +
                       (prod.precio || 0).toLocaleString()}
                   </p>

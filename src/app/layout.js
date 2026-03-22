@@ -4,7 +4,12 @@ export const metadata = {
   title: "Mi Tienda",
   description: "Ropa, Zapatillas y Electrónica",
   manifest: "/manifest.json",
+};
+
+export const viewport = {
   themeColor: "#000000",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({ children }) {

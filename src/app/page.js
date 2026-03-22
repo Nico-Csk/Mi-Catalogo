@@ -19,12 +19,11 @@ export default function Home() {
 
   var categorias = [
     "Todos",
-    "Remeras",
-    "Pantalones",
-    "Buzos",
-    "Accesorios",
+    "Electrónica",
     "Zapatillas",
-    "Electrónica"
+    "Perfumes",
+    "Ropa de Bebé",
+    "Camperas"
   ];
 
   useEffect(function () {
@@ -175,7 +174,7 @@ export default function Home() {
               className="text-stone-400 uppercase mt-0.5"
               style={{ fontFamily: fuente2, fontWeight: 300, fontSize: "10px", letterSpacing: "0.3em" }}
             >
-              Ropa &middot; Zapatillas &middot; Electrónica
+              Tu estilo, nuestra pasión
             </span>
           </a>
 
@@ -365,7 +364,7 @@ export default function Home() {
                 className="text-xs text-stone-400 mt-1"
                 style={{ fontFamily: fuente2, fontWeight: 300, letterSpacing: "0.1em" }}
               >
-                Ropa &middot; Zapatillas &middot; Electrónica
+                Tu estilo, nuestra pasión
               </p>
             </div>
             <a
