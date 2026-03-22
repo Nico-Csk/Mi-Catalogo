@@ -9,6 +9,11 @@ export default function Home() {
   var [busqueda, setBusqueda] = useState("");
   var [categoriaActiva, setCategoriaActiva] = useState("Todos");
   var [cargando, setCargando] = useState(true);
+    useEffect(function () {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js");
+    }
+  }, []);
 
   var categorias = [
     "Todos",
